@@ -1,0 +1,28 @@
+{
+  "name": "swot-europe-drought-portal",
+  "private": true,
+  "version": "0.7.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:data": "npm run data:sync && vite",
+    "build": "tsc --noEmit && vite build",
+    "build:data": "npm run data:sync && npm run build",
+    "preview": "vite preview",
+    "data:sync": "node scripts/sync-data.mjs",
+    "audit:data": "node scripts/audit-data.mjs",
+    "verify:data": "node scripts/verify-data.mjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.11.2",
+    "d3-geo": "^3.1.1",
+    "proj4": "^2.11.0",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2",
+    "pmtiles": "^4.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1"
+  }
+}

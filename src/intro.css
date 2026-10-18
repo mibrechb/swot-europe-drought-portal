@@ -1,0 +1,101 @@
+/* Intro prototype styles, scoped so they do not change the MapLibre portal UI. */
+.intro-overlay {
+  --intro-bg: #0b2238;
+  --intro-text: #eef3f7;
+  --intro-muted: #c9d4dd;
+  --intro-subtle: #98aab9;
+  --intro-orange: #ee9630;
+  --intro-orange-soft: #f4a44b;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--intro-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: opacity 450ms ease;
+}
+.intro-overlay.is-leaving { opacity: 0; pointer-events: none; }
+.intro-overlay *, .intro-overlay *::before, .intro-overlay *::after { box-sizing: border-box; }
+.intro-overlay button { font: inherit; }
+.intro-overlay button:focus-visible, .intro-overlay a:focus-visible { outline: 2px solid #a8dfff; outline-offset: 3px; }
+.intro-overlay .shade, .intro-overlay .observation-stage, .intro-overlay .panel { position: absolute; }
+.intro-overlay .shade {
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8,22,36,.72) 0%, rgba(8,22,36,.52) 30%, rgba(8,22,36,.18) 64%, rgba(8,22,36,.16) 100%),
+              linear-gradient(180deg, rgba(7,19,31,.22), rgba(7,19,31,.30));
+}
+.intro-overlay .panel {
+  z-index: 4;
+  top: clamp(28px, 4vw, 54px);
+  left: clamp(24px, 4vw, 54px);
+  width: min(560px, calc(100vw - 48px));
+  max-height: calc(100dvh - 100px);
+  overflow-y: auto;
+  padding: 28px 30px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(10,25,40,.80);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 60px rgba(0,0,0,.26);
+  scrollbar-width: thin;
+}
+.intro-overlay h1 { margin: 0 0 18px; font-size: clamp(2rem, 3vw, 3.1rem); line-height: 1.04; letter-spacing: -.035em; font-weight: 690; color: var(--intro-text); }
+.intro-overlay h1 em { font-style: normal; color: var(--intro-orange-soft); }
+.intro-overlay .panel p { margin: 0 0 14px; color: var(--intro-muted); font-size: 1rem; line-height: 1.6; }
+.intro-overlay .panel p.lead { color: #d9e6ef; }
+.intro-overlay .panel p strong { color: var(--intro-text); font-weight: 650; }
+.intro-overlay .facts { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 22px 0 0; padding: 16px 0; border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12); }
+.intro-overlay .facts div { display: grid; grid-template-columns: 148px 1fr; gap: 10px; }
+.intro-overlay .facts dt { color: var(--intro-orange-soft); font-size: .92rem; }
+.intro-overlay .facts dd { margin: 0; color: var(--intro-text); font-size: .96rem; }
+.intro-overlay .legend { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin-top: 18px; color: var(--intro-subtle); font-size: .88rem; }
+.intro-overlay .legend-bar { height: 8px; border-radius: 999px; background: linear-gradient(90deg, #ca6f2a, #efe8dd 50%, #5aaee2); }
+.intro-overlay .actions { display: flex; align-items: center; margin-top: 24px; }
+.intro-overlay .button-primary { cursor: pointer; border: 0; border-radius: 10px; padding: 13px 18px; background: var(--intro-orange); color: #11263a; font-weight: 700; }
+.intro-overlay .observation-stage { z-index: 2; inset: 0; pointer-events: none; }
+.intro-overlay .observation-map { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.intro-overlay .swath-overlay { opacity: .96; }
+.intro-overlay .coverage-boundary { fill: none; stroke: rgba(239,245,247,.42); stroke-width: 1.1; }
+.intro-overlay .ground-track { fill: none; stroke: rgba(239,245,247,.65); stroke-width: 1.1; stroke-dasharray: 5 8; }
+.intro-overlay .leading-edges { animation: intro-edge-breathe 3.4s ease-in-out infinite; }
+.intro-overlay .edge-fade { fill: url(#edgeFade); stroke: none; }
+.intro-overlay .edge-halo { fill: none; stroke: #ee9630; stroke-width: 12; opacity: .72; }
+.intro-overlay .edge-line { fill: none; stroke: #f8bc72; stroke-width: 2.3; opacity: .96; }
+@keyframes intro-edge-breathe { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.intro-overlay .acknowledgements { position: absolute; z-index: 5; bottom: 24px; right: 28px; display: flex; align-items: center; gap: 30px; }
+.intro-overlay .acknowledgements a { display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+.intro-overlay .acknowledgements img { display: block; object-fit: contain; filter: drop-shadow(0 0 7px rgba(255,255,255,.42)) drop-shadow(0 1px 10px rgba(8,21,35,.92)); }
+.intro-overlay .acknowledgements a:hover img { filter: drop-shadow(0 0 10px rgba(255,255,255,.70)) drop-shadow(0 1px 10px rgba(8,21,35,.92)); transform: translateY(-1px); }
+.intro-overlay .sos-logo { width: 108px; height: 108px; }
+.intro-overlay .eawag-logo { width: 265px; height: auto; }
+.intro-overlay .data-explorer { display: flex; align-items: center; gap: 13px; margin: 18px 0 4px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 9px; background: rgba(255,255,255,.045); color: var(--intro-muted); text-decoration: none; font-size: .9rem; line-height: 1.45; }
+.intro-overlay .data-explorer img { width: 44px; height: 44px; flex: 0 0 44px; object-fit: contain; border-radius: 10px; }
+.intro-overlay .data-explorer strong { color: var(--intro-text); font-weight: 650; }
+.intro-overlay .data-explorer .external-arrow { color: var(--intro-orange-soft); white-space: nowrap; }
+.intro-overlay .data-explorer:hover { border-color: rgba(244,164,75,.55); background: rgba(255,255,255,.075); }
+/* While the introduction is active, the real map fills the entire viewport. */
+body.intro-active .map-shell { inset: 0; }
+body.intro-active .topbar, body.intro-active .footerbar, body.intro-active .map-shell > :not(#map), body.intro-active .maplibregl-control-container { visibility: hidden; }
+@media (max-width: 960px) {
+  .intro-overlay .panel { width: min(580px, calc(100vw - 40px)); left: 20px; }
+  .intro-overlay .facts div { grid-template-columns: 132px 1fr; }
+  .intro-overlay .sos-logo { width: 86px; height: 86px; }
+  .intro-overlay .eawag-logo { width: 220px; }
+}
+@media (max-width: 720px) {
+  .intro-overlay .panel { width: calc(100vw - 28px); left: 14px; top: 14px; max-height: calc(100dvh - 110px); padding: 22px 20px 20px; }
+  .intro-overlay .facts div { grid-template-columns: 1fr; gap: 4px; }
+  .intro-overlay .observation-stage { display: none; }
+  .intro-overlay .shade { background: linear-gradient(180deg, rgba(8,22,36,.76) 0%, rgba(8,22,36,.46) 42%, rgba(8,22,36,.24) 100%); }
+  .intro-overlay .acknowledgements { bottom: 10px; right: 14px; gap: 16px; }
+  .intro-overlay .sos-logo { width: 58px; height: 58px; }
+  .intro-overlay .eawag-logo { width: 143px; }
+  .intro-overlay .data-explorer { margin-top: 14px; font-size: .86rem; }
+  .intro-overlay .data-explorer img { width: 38px; height: 38px; flex-basis: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay .observation-stage { display: none; }
+  .intro-overlay, .intro-overlay * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

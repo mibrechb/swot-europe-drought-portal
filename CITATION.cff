@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: >-
+  If you use this portal in research or publications,
+  please cite the software and the underlying SWOT
+  data products as described in README.md.
+
+title: 'Drought from Space: Europe 2026'
+type: software
+
+authors:
+  - family-names: 'Brechbühler'
+    given-names: 'Michael'
+    affiliation: 'Eawag, Swiss Federal Institute of Aquatic Science and Technology'
+    orcid: 'https://orcid.org/0000-0001-9941-1632'
+
+repository-code: 'https://github.com/mibrechb/swot-europe-drought-portal'
+license: 'Apache-2.0'
+date-released: '2026-10-18'
+
+keywords:
+  - 'SWOT'
+  - 'drought'
+  - 'European lakes and rivers'

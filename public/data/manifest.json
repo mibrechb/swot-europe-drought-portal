@@ -1,0 +1,203 @@
+{
+  "schema_version": 6,
+  "project": "Drought from Space: Europe 2026",
+  "region": "europe",
+  "generated_at": "2026-10-18T16:38:23Z",
+  "target_year": 2026,
+  "default_window": "2026_Jul-Aug",
+  "method": {
+    "version": "0.2-draft",
+    "product_version": "D",
+    "reference_start": "2022-12-16T00:00:00Z",
+    "seasonal_windows_days": [
+      45,
+      60,
+      90
+    ],
+    "target_baseline_n": 12,
+    "minimum_baseline_n": 8,
+    "period_minimum_n": 2,
+    "period_preferred_n": 3,
+    "lake_max_quality": 1,
+    "reach_max_quality": 1,
+    "collections": {
+      "lake": "SWOT_L2_HR_LakeSP_prior_D",
+      "reach": "SWOT_L2_HR_RiverSP_reach_D"
+    }
+  },
+  "counts": {
+    "features": 357583,
+    "period_rows": 1669867,
+    "publishable_rows": 1445429
+  },
+  "artifacts": {
+    "entities": {
+      "path": "latest/entities.parquet",
+      "bytes": 5403802,
+      "sha256": "90e995ea37031fabb422dfa46079392f369ec774a32eb9b58fe1658e8bb5d96b"
+    },
+    "period_metrics": {
+      "path": "latest/period_metrics.parquet",
+      "bytes": 29206039,
+      "sha256": "1abd6278d576d92afc3bbdbb4b3f75c06d88d86700dea51e569b75bf0d7ef677"
+    },
+    "geometry_pmtiles": {
+      "path": "latest/geometry/index.json",
+      "bytes": 180,
+      "sha256": "cb2f76b874ae77118b0dd53d58c21fdaf795556d94b33909ad2d086789576846",
+      "format": "chunked_pmtiles_v1",
+      "virtual_path": "latest/geometry.pmtiles"
+    },
+    "feature_index": {
+      "path": "latest/features/index.json",
+      "bytes": 3028,
+      "sha256": "ab40c3f05e08b8f4b1cdd93513bcbbf9072e84a7ca5ad3f725db0d2d5254a49f"
+    },
+    "timeseries_index": {
+      "path": "latest/timeseries/index.json",
+      "bytes": 3431,
+      "sha256": "f85a19f236f1a81d4f28d5bd53f4eab69cbef0f7f91ac431d931c0dba4c6fc3a"
+    },
+    "field_index": {
+      "path": "latest/fields/index.json",
+      "bytes": 2877,
+      "sha256": "3f2545f634177184a919802b7ea16cd45a9f3ac1dbd770939813ef5d2da29599"
+    }
+  },
+  "windows": [
+    {
+      "id": "2026_May-Jun",
+      "period_start": "2026-05-01T00:00:00Z",
+      "period_end": "2026-07-01T00:00:00Z",
+      "feature_count": 347237,
+      "publishable_count": 314094,
+      "support_counts": {
+        "lake": {
+          "insufficient": 32765,
+          "limited": 29438,
+          "standard": 270938
+        },
+        "reach": {
+          "insufficient": 378,
+          "limited": 455,
+          "standard": 13263
+        }
+      },
+      "web": {
+        "path": "latest/windows/2026_May-Jun/index.json",
+        "bytes": 3261,
+        "sha256": "f0ae30936b4d01a1163c9f6e28b05e1cd3149da99f74d7d9de0ed4759616d389"
+      }
+    },
+    {
+      "id": "2026_Jun-Jul",
+      "period_start": "2026-06-01T00:00:00Z",
+      "period_end": "2026-08-01T00:00:00Z",
+      "feature_count": 350048,
+      "publishable_count": 321983,
+      "support_counts": {
+        "lake": {
+          "insufficient": 27697,
+          "limited": 24951,
+          "standard": 283290
+        },
+        "reach": {
+          "insufficient": 368,
+          "limited": 457,
+          "standard": 13285
+        }
+      },
+      "web": {
+        "path": "latest/windows/2026_Jun-Jul/index.json",
+        "bytes": 3261,
+        "sha256": "8f3f28f73507d4e8ed2cd49131d27c7665aa5b0a38df321f9bfca45427fe6df8"
+      }
+    },
+    {
+      "id": "2026_Jul-Aug",
+      "period_start": "2026-07-01T00:00:00Z",
+      "period_end": "2026-09-01T00:00:00Z",
+      "feature_count": 346942,
+      "publishable_count": 319016,
+      "support_counts": {
+        "lake": {
+          "insufficient": 27543,
+          "limited": 23130,
+          "standard": 282128
+        },
+        "reach": {
+          "insufficient": 383,
+          "limited": 407,
+          "standard": 13351
+        }
+      },
+      "web": {
+        "path": "latest/windows/2026_Jul-Aug/index.json",
+        "bytes": 3261,
+        "sha256": "304a982933236aaab01c90848aad2ed860fe7478346c1a35704643e347fb0692"
+      }
+    },
+    {
+      "id": "2026_Aug-Sep",
+      "period_start": "2026-08-01T00:00:00Z",
+      "period_end": "2026-10-01T00:00:00Z",
+      "feature_count": 336906,
+      "publishable_count": 299927,
+      "support_counts": {
+        "lake": {
+          "insufficient": 36538,
+          "limited": 38223,
+          "standard": 248049
+        },
+        "reach": {
+          "insufficient": 441,
+          "limited": 719,
+          "standard": 12936
+        }
+      },
+      "web": {
+        "path": "latest/windows/2026_Aug-Sep/index.json",
+        "bytes": 3261,
+        "sha256": "75e55dbb3e290953997ae20b20c0c40218dcae07b25b88f71e29634f33e7d189"
+      }
+    },
+    {
+      "id": "2026_Sep-Oct",
+      "period_start": "2026-09-01T00:00:00Z",
+      "period_end": "2026-11-01T00:00:00Z",
+      "feature_count": 288734,
+      "publishable_count": 190409,
+      "support_counts": {
+        "lake": {
+          "insufficient": 96329,
+          "limited": 85136,
+          "standard": 93553
+        },
+        "reach": {
+          "insufficient": 1996,
+          "limited": 3890,
+          "standard": 7830
+        }
+      },
+      "web": {
+        "path": "latest/windows/2026_Sep-Oct/index.json",
+        "bytes": 3244,
+        "sha256": "63b8da61b30aa98101044496704274579b2b7a2fce1b7ee2d4e210736176eb6e"
+      }
+    }
+  ],
+  "basins": {
+    "level": 5,
+    "polygon_path": "latest/basins/level5.geojson",
+    "windows": {
+      "2026_May-Jun": "latest/basins/windows/2026_May-Jun.json",
+      "2026_Jun-Jul": "latest/basins/windows/2026_Jun-Jul.json",
+      "2026_Jul-Aug": "latest/basins/windows/2026_Jul-Aug.json",
+      "2026_Aug-Sep": "latest/basins/windows/2026_Aug-Sep.json",
+      "2026_Sep-Oct": "latest/basins/windows/2026_Sep-Oct.json"
+    },
+    "timeseries_index": "latest/basins/timeseries/index.json",
+    "feature_assignments": 390553,
+    "timeseries_count": 665
+  }
+}

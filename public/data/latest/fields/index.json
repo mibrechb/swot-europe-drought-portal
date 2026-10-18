@@ -1,0 +1,103 @@
+{
+  "schema_version": 6,
+  "encoding": "mapbox",
+  "tile_size": 256,
+  "minzoom": 2,
+  "maxzoom": 5,
+  "bounds": [
+    -25.0,
+    34.0,
+    51.0,
+    72.0
+  ],
+  "value_scale": 100.0,
+  "interpolation": {
+    "method": "idw_knn",
+    "power": 2.4,
+    "neighbors": 24,
+    "working_crs": "EPSG:3035",
+    "mask": "europe_land_boundary"
+  },
+  "surfaces": [
+    {
+      "window_id": "2026_May-Jun",
+      "feature_filter": "lake",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 300376,
+      "tile_path_template": "latest/fields/2026_May-Jun/relative/lake/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_May-Jun",
+      "feature_filter": "reach",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 13718,
+      "tile_path_template": "latest/fields/2026_May-Jun/relative/reach/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Jun-Jul",
+      "feature_filter": "lake",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 308241,
+      "tile_path_template": "latest/fields/2026_Jun-Jul/relative/lake/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Jun-Jul",
+      "feature_filter": "reach",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 13742,
+      "tile_path_template": "latest/fields/2026_Jun-Jul/relative/reach/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Jul-Aug",
+      "feature_filter": "lake",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 305258,
+      "tile_path_template": "latest/fields/2026_Jul-Aug/relative/lake/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Jul-Aug",
+      "feature_filter": "reach",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 13758,
+      "tile_path_template": "latest/fields/2026_Jul-Aug/relative/reach/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Aug-Sep",
+      "feature_filter": "lake",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 286272,
+      "tile_path_template": "latest/fields/2026_Aug-Sep/relative/lake/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Aug-Sep",
+      "feature_filter": "reach",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 13655,
+      "tile_path_template": "latest/fields/2026_Aug-Sep/relative/reach/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Sep-Oct",
+      "feature_filter": "lake",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 178689,
+      "tile_path_template": "latest/fields/2026_Sep-Oct/relative/lake/{z}/{x}/{y}.png"
+    },
+    {
+      "window_id": "2026_Sep-Oct",
+      "feature_filter": "reach",
+      "metric_mode": "relative",
+      "domain": 2.5,
+      "source_count": 11720,
+      "tile_path_template": "latest/fields/2026_Sep-Oct/relative/reach/{z}/{x}/{y}.png"
+    }
+  ]
+}
