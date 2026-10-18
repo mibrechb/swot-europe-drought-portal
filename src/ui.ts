@@ -213,7 +213,12 @@ function titleCase(value: string): string {
 }
 
 function featureDisplayName(feature: WindowFeature): string {
-  if (feature.name) return titleCase(feature.name.replaceAll(';', ', '));
+  const firstName = feature.name?.split(';', 1)[0].trim();
+  if (firstName) {
+    return firstName === firstName.toLocaleUpperCase()
+      ? titleCase(firstName)
+      : firstName;
+  }
   return `${feature.feature_type === 'lake' ? 'Lake' : 'River reach'} ${feature.feature_id}`;
 }
 
