@@ -210,23 +210,6 @@ button {
   background: #dfe5e8;
 }
 
-.map-logo {
-  position: absolute;
-  top: 18px;
-  left: 20px;
-  z-index: 15;
-  display: block;
-  width: 15vw;
-  height: auto;
-  max-width: none;
-  max-height: none;
-  object-fit: contain;
-  object-position: left top;
-  pointer-events: none;
-  user-select: none;
-  filter: drop-shadow(0 2px 8px rgb(0 0 0 / 18%));
-}
-
 .inset-card {
   position: absolute;
   left: 20px;

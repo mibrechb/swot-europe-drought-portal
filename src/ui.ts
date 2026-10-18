@@ -712,11 +712,6 @@ export class PortalUi {
 
       <main class="map-shell">
         <div id="map" class="map"></div>
-        <img
-          class="map-logo"
-          src="./assets/img/logo.png"
-          alt="Drought from Space: Europe 2026"
-        />
         <section class="period-control" aria-label="Map period">
           <div class="period-control-heading"><span>2026 · Mapping period</span><strong id="period-current">—</strong></div>
           <div class="period-slider-wrap">
