@@ -62,7 +62,7 @@ export function mountIntroOverlay(onDismiss: () => void): void {
       </p>
       <a class="data-explorer" href="https://swot.eawag.ch/" target="_blank" rel="noopener noreferrer" aria-label="Open the SWOT Lake and River Explorer in a new tab">
         <img src="./intro/swot-data-explorer_favicon.png" alt="" width="48" height="48">
-        <span>Interested in extracting your own SWOT water-level time series? Visit the <strong>SWOT Lake and River Explorer</strong> for lakes and rivers. <span class="external-arrow" aria-hidden="true">↗</span></span>
+        <span>Interested in extracting your own SWOT water-level time series? Visit the <strong>SWOT Lake and River Explorer</strong>. <span class="external-arrow" aria-hidden="true">↗</span></span>
       </a>
       <dl class="facts">
         <div><dt>Observed from space</dt><dd>SWOT KaRIn radar altimetry</dd></div>
