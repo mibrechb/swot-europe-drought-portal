@@ -2,7 +2,7 @@
   "schema_version": 6,
   "project": "Drought from Space: Europe 2026",
   "region": "europe",
-  "generated_at": "2026-10-18T16:38:23Z",
+  "generated_at": "2026-10-18T21:06:29Z",
   "target_year": 2026,
   "default_window": "2026_Aug-Sep",
   "method": {
@@ -33,13 +33,13 @@
   "artifacts": {
     "entities": {
       "path": "latest/entities.parquet",
-      "bytes": 5403802,
-      "sha256": "90e995ea37031fabb422dfa46079392f369ec774a32eb9b58fe1658e8bb5d96b"
+      "bytes": 5979033,
+      "sha256": "5aad84398b6a1788cbf92675cb897783dbed9066342ba88bb5984b45c05adbfa"
     },
     "period_metrics": {
       "path": "latest/period_metrics.parquet",
-      "bytes": 29206039,
-      "sha256": "1abd6278d576d92afc3bbdbb4b3f75c06d88d86700dea51e569b75bf0d7ef677"
+      "bytes": 30216536,
+      "sha256": "9139c2bc7b17a0bcfeaa983b810fa8d9cbb72d20980632f459042ce31b18d85d"
     },
     "geometry_pmtiles": {
       "path": "latest/geometry/index.json",
@@ -50,8 +50,8 @@
     },
     "feature_index": {
       "path": "latest/features/index.json",
-      "bytes": 3028,
-      "sha256": "ab40c3f05e08b8f4b1cdd93513bcbbf9072e84a7ca5ad3f725db0d2d5254a49f"
+      "bytes": 3038,
+      "sha256": "131bfd20b81a29b3de165ae7ebdcdfe57bb8c12821a007e5f94d56d4912f6d89"
     },
     "timeseries_index": {
       "path": "latest/timeseries/index.json",
