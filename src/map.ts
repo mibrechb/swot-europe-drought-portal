@@ -5,6 +5,7 @@ import {
   NavigationControl,
   RasterDEMTileSource,
 } from 'maplibre-gl';
+import type {CircleLayerSpecification} from 'maplibre-gl';
 import {basemapStyle} from './basemap';
 import type {
   BasinFeature,
@@ -233,7 +234,6 @@ export class DroughtMap {
       maxZoom: 13,
       maxBounds: [[-32, 30], [52, 75]],
       attributionControl: false,
-      antialias: true,
     });
 
     this.map.addControl(new NavigationControl({showCompass: false}), 'top-right');
@@ -523,7 +523,7 @@ export class DroughtMap {
       );
     }
 
-    const centroidBasePaint = {
+    const centroidBasePaint: NonNullable<CircleLayerSpecification['paint']> = {
       'circle-stroke-color': '#ffffff',
       'circle-stroke-width': 1,
       'circle-opacity': [
@@ -552,7 +552,7 @@ export class DroughtMap {
         8.3,
         0.65,
       ],
-    } as const;
+    };
 
     if (!this.map.getLayer(LAKE_CENTROID_LAYER_ID)) {
       this.map.addLayer(
