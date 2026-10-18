@@ -13,12 +13,10 @@ export function mapWindows(manifest: Manifest): WindowMetadata[] {
   return twoMonth.length > 0 ? twoMonth : manifest.windows;
 }
 
-/** Prefer the mid-summer comparison period when it is available. */
+/** Use the publication's configured default period. */
 export function initialMapWindowId(manifest: Manifest): string {
   const available = mapWindows(manifest);
-  const preferred = `${manifest.target_year}_Jul-Aug`;
-  return available.find((window) => window.id === preferred)?.id
-    ?? available.find((window) => window.id === manifest.default_window)?.id
+  return available.find((window) => window.id === manifest.default_window)?.id
     ?? available[0]?.id
     ?? manifest.default_window;
 }
