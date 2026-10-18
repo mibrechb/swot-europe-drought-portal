@@ -46,7 +46,7 @@ export function mountIntroOverlay(onDismiss: () => void): void {
           <path id="leftEdgeLine" class="edge-line"></path>
           <path id="rightEdgeLine" class="edge-line"></path>
         </g>
-        <image id="satelliteSvg" href="./intro/swot-redraw.webp" x="0" y="0" width="235" height="176.25" preserveAspectRatio="xMidYMid meet"></image>
+        <image id="satelliteSvg" class="satellite-illustration" href="./intro/swot-redraw.webp" x="0" y="0" width="235" height="176.25" preserveAspectRatio="xMidYMid meet"></image>
       </svg>
     </div>
 
@@ -112,6 +112,9 @@ export function mountIntroOverlay(onDismiss: () => void): void {
   const durationMs = 8800;
   const satWidth = 235;
   const satHeight = 176.25;
+  const satFinalScale = 1.25;
+  const swathHalfSpan = 112;
+  const nadirHalfGap = swathHalfSpan * 20 / (50 + 20 + 50);
   let frameId: number | null = null;
   let launchTime: number | null = null;
   let entered = false;
@@ -132,10 +135,12 @@ export function mountIntroOverlay(onDismiss: () => void): void {
     const head = {x: start.x + (end.x - start.x) * t, y: start.y + (end.y - start.y) * t};
     const swathFront = point(head, 0, 18);
     const leftSwath = quadrilateral(
-      point(start, -112), point(start, -40), point(swathFront, -40), point(swathFront, -112),
+      point(start, -swathHalfSpan), point(start, -nadirHalfGap),
+      point(swathFront, -nadirHalfGap), point(swathFront, -swathHalfSpan),
     );
     const rightSwath = quadrilateral(
-      point(start, 40), point(start, 112), point(swathFront, 112), point(swathFront, 40),
+      point(start, nadirHalfGap), point(start, swathHalfSpan),
+      point(swathFront, swathHalfSpan), point(swathFront, nadirHalfGap),
     );
     leftSwathClipPath.setAttribute('d', leftSwath);
     rightSwathClipPath.setAttribute('d', rightSwath);
@@ -145,13 +150,15 @@ export function mountIntroOverlay(onDismiss: () => void): void {
 
     const fadeBack = point(swathFront, 0, -48);
     leftEdgeFade.setAttribute('d', quadrilateral(
-      point(fadeBack, -112), point(fadeBack, -40), point(swathFront, -40), point(swathFront, -112),
+      point(fadeBack, -swathHalfSpan), point(fadeBack, -nadirHalfGap),
+      point(swathFront, -nadirHalfGap), point(swathFront, -swathHalfSpan),
     ));
     rightEdgeFade.setAttribute('d', quadrilateral(
-      point(fadeBack, 40), point(fadeBack, 112), point(swathFront, 112), point(swathFront, 40),
+      point(fadeBack, nadirHalfGap), point(fadeBack, swathHalfSpan),
+      point(swathFront, swathHalfSpan), point(swathFront, nadirHalfGap),
     ));
-    const leftEdge = segment(point(swathFront, -112), point(swathFront, -40));
-    const rightEdge = segment(point(swathFront, 40), point(swathFront, 112));
+    const leftEdge = segment(point(swathFront, -swathHalfSpan), point(swathFront, -nadirHalfGap));
+    const rightEdge = segment(point(swathFront, nadirHalfGap), point(swathFront, swathHalfSpan));
     leftEdgeHalo.setAttribute('d', leftEdge);
     rightEdgeHalo.setAttribute('d', rightEdge);
     leftEdgeLine.setAttribute('d', leftEdge);
@@ -160,8 +167,14 @@ export function mountIntroOverlay(onDismiss: () => void): void {
     edgeFadeGradient.setAttribute('y1', fadeBack.y.toFixed(2));
     edgeFadeGradient.setAttribute('x2', swathFront.x.toFixed(2));
     edgeFadeGradient.setAttribute('y2', swathFront.y.toFixed(2));
-    satellite.setAttribute('x', (head.x - satWidth / 2).toFixed(1));
-    satellite.setAttribute('y', (head.y - satHeight / 2).toFixed(1));
+    const approach = t * t * (3 - 2 * t);
+    const satScale = 1 + (satFinalScale - 1) * approach;
+    const width = satWidth * satScale;
+    const height = satHeight * satScale;
+    satellite.setAttribute('x', (head.x - width / 2).toFixed(1));
+    satellite.setAttribute('y', (head.y - height / 2).toFixed(1));
+    satellite.setAttribute('width', width.toFixed(1));
+    satellite.setAttribute('height', height.toFixed(1));
   }
 
   function animate(timestamp: number): void {
