@@ -46,7 +46,7 @@ export function mountIntroOverlay(onDismiss: () => void): void {
           <path id="leftEdgeLine" class="edge-line"></path>
           <path id="rightEdgeLine" class="edge-line"></path>
         </g>
-        <image id="satelliteSvg" class="satellite-illustration" href="./intro/swot-redraw.webp" x="0" y="0" width="235" height="176.25" preserveAspectRatio="xMidYMid meet"></image>
+        <image id="satelliteSvg" href="./intro/swot-redraw.webp" x="0" y="0" width="235" height="176.25" preserveAspectRatio="xMidYMid meet"></image>
       </svg>
     </div>
 
@@ -104,15 +104,20 @@ export function mountIntroOverlay(onDismiss: () => void): void {
   const leftSwathClipPath = required<SVGPathElement>('#leftSwathClipPath');
   const rightSwathClipPath = required<SVGPathElement>('#rightSwathClipPath');
 
-  const start = {x: 1110, y: -95};
+  const start = {x: 1350, y: -275};
   const end = {x: -120, y: 820};
   const norm = Math.hypot(end.x - start.x, end.y - start.y);
   const along = {x: (end.x - start.x) / norm, y: (end.y - start.y) / norm};
   const cross = {x: -along.y, y: along.x};
-  const durationMs = 8800;
+  const durationMs = 8000;
+  const animationDelayMs = 500;
   const satWidth = 235;
   const satHeight = 176.25;
-  const satFinalScale = 1.25;
+  const satelliteSpeed = 1.1;
+  const satelliteFinalScale = 1.75;
+  const satelliteAlongOffset = 0;
+  const satelliteCrossOffset = -50;
+  const satelliteExitOffset = 120;
   const swathHalfSpan = 112;
   const nadirHalfGap = swathHalfSpan * 20 / (50 + 20 + 50);
   let frameId: number | null = null;
@@ -168,18 +173,23 @@ export function mountIntroOverlay(onDismiss: () => void): void {
     edgeFadeGradient.setAttribute('x2', swathFront.x.toFixed(2));
     edgeFadeGradient.setAttribute('y2', swathFront.y.toFixed(2));
     const approach = t * t * (3 - 2 * t);
-    const satScale = 1 + (satFinalScale - 1) * approach;
+    const satScale = 1 + (satelliteFinalScale - 1) * approach;
+    const satelliteHead = point({
+      x: start.x + (end.x - start.x) * t * satelliteSpeed,
+      y: start.y + (end.y - start.y) * t * satelliteSpeed,
+    }, satelliteCrossOffset, satelliteAlongOffset + satelliteExitOffset * approach);
     const width = satWidth * satScale;
     const height = satHeight * satScale;
-    satellite.setAttribute('x', (head.x - width / 2).toFixed(1));
-    satellite.setAttribute('y', (head.y - height / 2).toFixed(1));
+    satellite.setAttribute('x', (satelliteHead.x - width / 2).toFixed(1));
+    satellite.setAttribute('y', (satelliteHead.y - height / 2).toFixed(1));
     satellite.setAttribute('width', width.toFixed(1));
     satellite.setAttribute('height', height.toFixed(1));
   }
 
   function animate(timestamp: number): void {
     if (launchTime === null) launchTime = timestamp;
-    const t = Math.min(1, (timestamp - launchTime) / durationMs);
+    const elapsedMs = Math.max(0, timestamp - launchTime - animationDelayMs);
+    const t = Math.min(1, elapsedMs / durationMs);
     render(t);
     frameId = t < 1 ? requestAnimationFrame(animate) : null;
   }
