@@ -70,11 +70,13 @@ function seasonalPercentages(value: number): {lower: number; higher: number} {
 /** Describe the seasonal rank without implying a measured WSE standard deviation. */
 function seasonalMagnitude(value: number): string {
   const magnitude = Math.abs(value);
-  if (magnitude < 0.25) return 'close to usual';
+  if (magnitude < 0.1) return 'close to usual';
   const direction = value < 0 ? 'lower' : 'higher';
-  if (magnitude < 1) return `slightly ${direction} than usual`;
-  if (magnitude < 2) return `considerably ${direction} than usual`;
-  return `much ${direction} than usual`;
+  if (magnitude < 0.25) return `slightly ${direction} than usual`;
+  if (magnitude < 0.5) return `noticeably ${direction} than usual`;
+  if (magnitude < 1) return `considerably ${direction} than usual`;
+  if (magnitude < 2) return `much ${direction} than usual`;
+  return `exceptionally ${direction} than usual`;
 }
 
 function relativeIndexSummary(
