@@ -52,13 +52,6 @@ function formatSigned(value: number | null, digits: number, suffix = ''): string
   return `${prefix}${value.toFixed(digits)}${suffix}`;
 }
 
-function ordinal(value: number): string {
-  const suffix = value % 100 >= 11 && value % 100 <= 13 ? 'th'
-    : value % 10 === 1 ? 'st' : value % 10 === 2 ? 'nd'
-      : value % 10 === 3 ? 'rd' : 'th';
-  return `${value}${suffix}`;
-}
-
 /** Approximate the normal CDF for explaining the empirical normal-score index. */
 function normalCdf(value: number): number {
   const x = Math.abs(value) / Math.sqrt(2);
@@ -68,7 +61,37 @@ function normalCdf(value: number): number {
   return (1 + (value < 0 ? -erf : erf)) / 2;
 }
 
-/** Display the empirical seasonal rank on a familiar reference curve. */
+/** Percentages represented by the rank-based seasonal normal score. */
+function seasonalPercentages(value: number): {lower: number; higher: number} {
+  const lower = Math.round(normalCdf(value) * 100);
+  return {lower, higher: 100 - lower};
+}
+
+/** Describe the seasonal rank without implying a measured WSE standard deviation. */
+function seasonalMagnitude(value: number): string {
+  const magnitude = Math.abs(value);
+  if (magnitude < 0.25) return 'close to usual';
+  const direction = value < 0 ? 'lower' : 'higher';
+  if (magnitude < 1) return `slightly ${direction} than usual`;
+  if (magnitude < 2) return `considerably ${direction} than usual`;
+  return `much ${direction} than usual`;
+}
+
+function relativeIndexSummary(
+  value: number | null,
+  subject: string,
+  isRegional = false,
+): string {
+  if (value === null || !Number.isFinite(value)) return '';
+  const {lower, higher} = seasonalPercentages(value);
+  const condition = seasonalMagnitude(value);
+  if (isRegional) {
+    return ` ${subject} relative water-level index was ${formatSigned(value, 2)}, indicating conditions ${condition} for this season. On the estimated seasonal reference scale, about ${lower}% of comparable water levels would be lower, and ${higher}% higher.`;
+  }
+  return ` ${subject} relative water-level index was ${formatSigned(value, 2)}, indicating water levels ${condition} for this season. On the estimated seasonal reference scale, about ${lower}% of comparable water levels would be lower, and ${higher}% higher.`;
+}
+
+/** Display the seasonal rank on a standard normal reference curve. */
 function scoreGaugeMarkup(value: number | null): string {
   if (value === null || !Number.isFinite(value)) return '';
   const width = 300;
@@ -85,13 +108,14 @@ function scoreGaugeMarkup(value: number | null): string {
   }).join(' ');
   const marker = x(value);
   const markerY = bottom - normal(Math.max(-3, Math.min(3, value))) * (bottom - top);
-  const percentile = Math.round(normalCdf(value) * 100);
-  const direction = value < -0.05 ? 'Lower than usual' : value > 0.05
-    ? 'Higher than usual' : 'Typical seasonal level';
+  const {lower, higher} = seasonalPercentages(value);
+  const percentLabelGap = 12;
+  const lowerLabelX = marker - percentLabelGap;
+  const higherLabelX = marker + percentLabelGap;
   const gradientId = 'seasonal-rank-gradient';
   return `<div class="score-gauge">
     <div class="score-gauge-heading"><span>Relative water-level index</span><strong>${formatSigned(value, 2)}</strong></div>
-    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(direction)}: index ${formatSigned(value, 2)}; roughly ${ordinal(percentile)} percentile on the seasonal comparison scale">
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Relative water-level index ${formatSigned(value, 2)}: about ${lower}% of the seasonal reference distribution is lower and ${higher}% is higher">
       <defs>
         <linearGradient id="${gradientId}" x1="0" x2="1" y1="0" y2="0">
           <stop offset="0%" stop-color="#bc4311" />
@@ -106,6 +130,8 @@ function scoreGaugeMarkup(value: number | null): string {
       <line class="score-gauge-zero" x1="${x(0)}" x2="${x(0)}" y1="${top}" y2="${bottom}" />
       <line class="score-gauge-marker" x1="${marker}" x2="${marker}" y1="${Math.max(top - 3, markerY - 10)}" y2="${bottom + 2}" />
       <circle class="score-gauge-dot" cx="${marker}" cy="${markerY}" r="4" />
+      <text class="score-gauge-percent" x="${lowerLabelX.toFixed(1)}" y="${bottom - 11}" text-anchor="end">${lower}%</text>
+      <text class="score-gauge-percent" x="${higherLabelX.toFixed(1)}" y="${bottom - 11}" text-anchor="start">${higher}%</text>
       <text class="score-gauge-tick" x="${x(-2)}" y="${bottom + 13}" text-anchor="middle">−2</text>
       <text class="score-gauge-tick" x="${x(0)}" y="${bottom + 13}" text-anchor="middle">0</text>
       <text class="score-gauge-tick" x="${x(2)}" y="${bottom + 13}" text-anchor="middle">+2</text>
@@ -113,7 +139,6 @@ function scoreGaugeMarkup(value: number | null): string {
       <text class="score-gauge-scale-label" x="${x(0)}" y="${height - 4}" text-anchor="middle">Seasonal baseline</text>
       <text class="score-gauge-scale-label" x="${right}" y="${height - 4}" text-anchor="end">Higher</text>
     </svg>
-    <div class="score-gauge-reading">${direction} · around the ${ordinal(percentile)} seasonal percentile</div>
   </div>`;
 }
 
@@ -126,14 +151,10 @@ function basinSummary(basin: BasinFeature, windowId: string | null): string {
     const levelDescription = Math.abs(change) < 0.02
       ? `close to their usual seasonal levels (median difference ${formatSigned(change, 2, ' m')})`
       : `${Math.abs(change).toFixed(2)} m ${change < 0 ? 'below' : 'above'} their usual seasonal levels (median difference)`;
-    const relativeDescription = Number.isFinite(basin.relative_index)
-      ? ` Their relative water-level index was ${formatSigned(basin.relative_index, 2)}, indicating ${basin.relative_index < -0.05 ? 'lower' : basin.relative_index > 0.05 ? 'higher' : 'typical'} seasonal conditions.`
-      : '';
-    return `For ${period}, water levels across ${count} contributing ${kind} were typically ${levelDescription}.${relativeDescription}`;
+    return `For ${period}, water levels across ${count} contributing ${kind} were typically ${levelDescription}.${relativeIndexSummary(basin.relative_index, 'Their median', true)}`;
   }
-  if (Number.isFinite(basin.relative_index)) {
-    const percentile = Math.round(100 * normalCdf(basin.relative_index));
-    return `For ${period}, the typical one of ${count} contributing ${kind} ranked around the ${ordinal(percentile)} percentile of its own seasonal water-level observations.`;
+  if (basin.relative_index !== null && Number.isFinite(basin.relative_index)) {
+    return `For ${period}, ${count} ${kind} contributed to the regional estimate.${relativeIndexSummary(basin.relative_index, 'Their median', true)}`;
   }
   return `For ${period}, there are not enough comparable observations for these ${kind}.`;
 }
@@ -227,12 +248,12 @@ function featureSummary(feature: WindowFeature, windowId: string | null): string
   const period = windowId ? periodLabel(windowId) : 'the selected period';
   const anomaly = feature.anomaly_m;
   if (anomaly === null || !Number.isFinite(anomaly)) {
-    return `For ${period}, there are not enough comparable water-level measurements for this ${kind}.`;
+    return `For ${period}, there are not enough comparable water-level measurements for this ${kind}.${relativeIndexSummary(feature.relative_index, 'Its')}`;
   }
-  if (Math.abs(anomaly) < 0.02) {
-    return `For ${period}, this ${kind}'s water level was close to its usual seasonal level (median difference ${formatSigned(anomaly, 2, ' m')}).`;
-  }
-  return `For ${period}, this ${kind}'s median water level was ${Math.abs(anomaly).toFixed(2)} m ${anomaly < 0 ? 'below' : 'above'} its usual level for this time of year (based on previous SWOT observations).`;
+  const levelDescription = Math.abs(anomaly) < 0.02
+    ? `this ${kind}'s water level was close to its usual seasonal level (median difference ${formatSigned(anomaly, 2, ' m')})`
+    : `this ${kind}'s median water level was ${Math.abs(anomaly).toFixed(2)} m ${anomaly < 0 ? 'below' : 'above'} its usual level for this time of year (based on previous SWOT observations)`;
+  return `For ${period}, ${levelDescription}.${relativeIndexSummary(feature.relative_index, 'Its')}`;
 }
 
 function sparklineMarkup(
@@ -242,7 +263,7 @@ function sparklineMarkup(
   basinSeries: BasinTimeseries | null = null,
 ): string {
   if (timeseries === null) {
-    return '<div class="series-loading">Loading 2026 observations…</div>';
+    return '<div class="series-loading" role="status" aria-live="polite"><span class="series-spinner" aria-hidden="true"></span><span>Loading 2026 observations…</span></div>';
   }
 
   const sortedObservations = [...timeseries.observations].sort(
@@ -405,11 +426,11 @@ function sparklineMarkup(
     </svg>
     <div class="series-date-range"><span>Jan</span><span>Dec</span></div>
     ${isBasin ? `<div class="series-key series-key-regional-pairs">
-      <div class="series-key-row"><span><i class="series-key-line series-key-regional"></i>Median (2026)</span><span><i class="series-key-current-band"></i>P<sub>25</sub>–P<sub>75</sub></span></div>
-      ${comparableHistory ? '<div class="series-key-row"><span><i class="series-key-dash"></i>Historical median (2023–2025)</span><span><i class="series-key-band series-key-history"></i>P<sub>25</sub>–P<sub>75</sub></span></div>' : ''}
+      <div class="series-key-row"><span><i class="series-key-line series-key-regional"></i>Median (2026)</span><span><i class="series-key-current-band"></i><span class="series-key-percentiles">P<sub>25</sub>–P<sub>75</sub></span></span></div>
+      ${comparableHistory ? '<div class="series-key-row"><span><i class="series-key-dash"></i>Historical median (2023–2025)</span><span><i class="series-key-band series-key-history"></i><span class="series-key-percentiles">P<sub>25</sub>–P<sub>75</sub></span></span></div>' : ''}
     </div>` : `<div class="series-key">
       <span><i class="series-key-line"></i>2026 water level</span>
-      <span><i class="series-key-band"></i>Historical P<sub>25</sub>–P<sub>75</sub></span>
+      <span><i class="series-key-band"></i><span class="series-key-percentiles">Historical P<sub>25</sub>–P<sub>75</sub></span></span>
       <span><i class="series-key-dash"></i>Historical median</span>
     </div>`}
     ${isBasin ? (comparableHistory ? '' : '<p class="series-note">The historical interval will appear after the regional data are republished.</p>') : ''}
@@ -579,7 +600,7 @@ export class PortalUi {
       </div>
       <p class="feature-summary">${escapeHtml(basinSummary(basin, windowId))}</p>
       <section class="metric-grid">
-        <div><span>Relative water level</span><strong>${formatSigned(basin.relative_index, 2)}</strong><small>Typical position on the seasonal scale</small></div>
+        <div><span>Relative anomaly</span><strong>${formatSigned(basin.relative_index, 2)}</strong><small>Median seasonal index (0 = typical)</small></div>
         <div><span>Contributing ${basin.feature_type === 'lake' ? 'lakes' : 'river reaches'}</span><strong>${basin.feature_count}</strong><small>${basin.observation_count} observations in period</small></div>
       </section>
       ${scoreGaugeMarkup(basin.relative_index)}
@@ -611,8 +632,8 @@ export class PortalUi {
       <p class="feature-summary">${escapeHtml(featureSummary(feature, windowId))}</p>
 
       <section class="metric-grid">
-        <div><span>Relative water level</span><strong>${formatSigned(feature.relative_index, 2)}</strong><small>0 = usual seasonal level</small></div>
-        <div><span>Water-level anomaly</span><strong>${formatSigned(feature.anomaly_m, 2, ' m')}</strong><small>difference from usual seasonal level</small></div>
+        <div><span>Relative anomaly</span><strong>${formatSigned(feature.relative_index, 2)}</strong><small>Seasonal index (0 = typical)</small></div>
+        <div><span>Absolute anomaly</span><strong>${formatSigned(feature.anomaly_m, 2, ' m')}</strong><small>Difference from the usual seasonal water level</small></div>
       </section>
       ${scoreGaugeMarkup(feature.relative_index)}
 

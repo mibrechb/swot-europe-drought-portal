@@ -843,10 +843,15 @@ input {
   font-size: 9px;
 }
 
-.score-gauge-reading {
-  color: var(--text-muted);
+/* Percentages indicate the seasonal reference area on either side of the marker. */
+.score-gauge svg .score-gauge-percent {
+  fill: var(--text);
   font-size: 11px;
-  margin-top: -3px;
+  font-weight: 750;
+  paint-order: stroke;
+  stroke: var(--surface-solid);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
 }
 
 /* Time-series charts */
@@ -916,8 +921,12 @@ input {
 }
 
 .series-point {
-  stroke: var(--surface-solid);
+  stroke: #52636e;
   stroke-width: 1.5;
+}
+
+:root[data-theme="dark"] .series-point {
+  stroke: var(--surface-solid);
 }
 
 .series-window-marker {
@@ -935,7 +944,7 @@ input {
   letter-spacing: .02em;
 }
 
-.series-key span {
+.series-key > span {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -957,11 +966,31 @@ input {
 
 .series-loading {
   min-height: 112px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   color: var(--text-muted);
   font-size: 12px;
   text-align: center;
+}
+
+.series-spinner {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  border: 2px solid color-mix(in srgb, var(--text-muted) 22%, transparent);
+  border-top-color: var(--orange-500);
+  border-radius: 50%;
+  animation: series-spinner-rotate 850ms linear infinite;
+}
+
+@keyframes series-spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .series-spinner { animation: none; }
 }
 
 .series-envelope {
@@ -1047,15 +1076,21 @@ input {
   gap: 7px 12px;
 }
 
-.series-key-row span {
+.series-key-row > span {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
   gap: 5px;
 }
 
-.series-key-row sub {
-  font-size: .72em;
+.series-key-percentiles {
+  white-space: nowrap;
+}
+
+.series-key-percentiles sub {
+  font-size: 0.72em;
+  vertical-align: sub;
+  line-height: 0;
 }
 
 .regional-series .series-interpolated {
