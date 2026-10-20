@@ -1,1 +1,1 @@
-{"format":"chunked_pmtiles_v1","chunk_bytes":67108864,"total_bytes":203888839,"parts":[67108864,67108864,67108864,2562247],"part_path_template":"latest/geometry/part-{part}.bin"}
+{"format":"chunked_pmtiles_v1","chunk_bytes":67108864,"total_bytes":211762659,"parts":[67108864,67108864,67108864,10436067],"part_path_template":"latest/geometry/part-{part}.bin"}
